@@ -1,0 +1,46 @@
+    #container {
+        background-color:white;
+    }
+
+
+    #noticias {
+        position: relative;
+
+    }
+
+    .f20 {
+        font-size: 20px;
+    }
+
+    .div-noticias {
+        position: relative;
+        top: 0px;
+        transition: all 200ms linear;
+    }
+
+    .div-noticias:hover {
+        position: relative;
+        top: -8px;
+        box-shadow: 2px 2px 20px 2px rgba(0,0,0,0.5);
+        transition: all 200ms linear;
+
+    }
+
+    .div-menu:hover {
+        background-color:#218838 ;
+        border-color: #1e7e34;
+	}
+
+	.btn-options {
+		background-color: #ddd !important;
+		visibility: hidden !important;
+		opacity: 0 !important;
+		transition: all 300ms;
+	}
+
+	.area-comment:hover .btn-options {
+		display: block !important;
+		visibility: visible !important;
+		opacity: 1 !important;
+		transition: all 300ms;
+	}
