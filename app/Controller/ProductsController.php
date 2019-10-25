@@ -72,4 +72,51 @@ class ProductsController extends AppController
 
 	}
 
+	public function edit($id) {
+
+		echo $id;
+		die;
+
+		$name = $this->request->query['name'];
+		$value = $this->request->query['value'];
+		$quant = $this->request->query['quantity'];
+
+		$saveToJson = '';
+
+		$save = array(
+			'Product' => array(
+				'id' => $id,
+				'name' => $name,
+				'value' => $value,
+				'quantity' => $quant
+			)
+		);
+
+		if ($this->Product->save($save)) {
+			foreach ($save as $s) {
+				$s['mensagem'] = 'Sucesso';
+				$saveToJson = $s;
+			}
+			echo json_encode($saveToJson);
+		}
+	}
+
+	public function recuperar($id) {
+
+		$buscarEdit = $this->Product->find('first', array(
+			'conditions' => array(
+				'id' => $id
+			)
+		));
+
+		$retornoItens = '';
+
+		foreach($buscarEdit as $b) {
+			$retornoItens = $b;
+		}
+
+		echo json_encode($retornoItens);
+
+	}
+
 }

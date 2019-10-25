@@ -26,17 +26,44 @@
   <tbody id="body">
 			<?php foreach($products as $product): ?>
 			<tr id="<?= $product['Product']['id']; ?>">
-				<td><?= $product['Product']['id']; ?></td>
-				<td><?= $product['Product']['name']; ?></td>
-				<td><?= $product['Product']['value']; ?></td>
-				<td id="quantity<?= $product['Product']['id']; ?>"><?= $product['Product']['quantity']; ?></td>
+				<td id="idSub"><?= $product['Product']['id']; ?></td>
+				<td id="nameSub"><?= $product['Product']['name']; ?></td>
+				<td id = "valueSub"><?= $product['Product']['value']; ?></td>
+				<td id="quantitySub"><?= $product['Product']['quantity']; ?></td>
 				<td><?= $product['Product']['created']; ?></td>
 				<td>
+				<button onclick="showEditId(<?= $product['Product']['id']; ?>)"  type="button" class="" data-toggle="modal" data-target="#modalExemplo">
+					<i class="fas fa-edit"></i>
+				</button>
+
+				<!-- Modal -->
+				<div class="modal fade" id="modalExemplo" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+				<div class="modal-dialog" role="document">
+					<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="exampleModalLabel">Título do modal</h5>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+						<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<div class="modal-body">
+						<?= $this->Form->input('name', array('id' => 'editName')); ?>
+						<?= $this->Form->input('value', array('id' => 'editValue')); ?>
+						<?= $this->Form->input('quantity', array('type' => 'number', 'id' => 'editQuantity')); ?>
+
+						<button id='submitEdit'>
+								Editar
+						</button>
+
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+					</div>
+					</div>
+				</div>
+				</div>
 					<button onclick="showId(<?= $product['Product']['id']; ?>)">
 						<i alt="excluir" class="fas fa-trash-alt"></i>
-					</button>
-					<button onclick="showEditId(<?= $product['Product']['id']; ?>)">
-						<i class="fas fa-edit"></i>
 					</button>
 				</td>
 			</tr>
@@ -114,26 +141,71 @@
 
 	}
 
-	function abc(id) {
-		console.log(id + ' abc')
-	}
-
 </script>
 
 
 <script>
 
 	function showEditId(id) {
-	console.log(id)
-	$('#quantity'+id).html('<input id="quant"  placeholder="Insira a quantidade"> ')
+
+
+
+
+
+		const urlRecuperar= <?= json_encode(Router::url(array(
+			'controller' => 'products',
+			'action' => 'recuperar',
+		)))?>+'/'+id;
+
+
+			$.ajax({
+				type: 'GET',
+				url: urlRecuperar,
+				dataType: 'json',
+				success: dados => {
+					$('#editName').val(dados.name)
+					$('#editValue').val(dados.value)
+					$('#editQuantity').val(dados.quantity)
+
+				}
+			})
+
+			$('#submitEdit').on('click', () => {
+
+			const urlEdit= <?= json_encode(Router::url(array(
+				'controller' => 'products',
+				'action' => 'edit',
+			)))?>+'/'+id;
+
+
+				var name = $('#editName').val();
+				var value = $('#editValue').val();
+				var quantity = $('#editQuantity').val();
+
+				console.log()
+
+				$.ajax({
+					type: 'GET',
+					url: urlEdit,
+					data: {
+						'name' : name,
+						'value': value,
+						'quantity' : quantity
+					},
+					dataType: 'json',
+					success: dados => {
+						console.log(dados)
+						$('#idSub').html(dados.id)
+						$('#nameSub').html(dados.name)
+						$('#quantitySub').html(dados.quantity)
+						$('#valueSub').html(dados.value)
+						$('#modalExemplo').modal('hide')
+					}
+				})
+
+			})
 
 	}
-
-	$('#quant').click(function (event) {
-		if(event.target.id != 'text2'){
-			$('#quant').hide();
-		}
-	});
 
 
 </script>
